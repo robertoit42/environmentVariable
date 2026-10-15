@@ -1,0 +1,20 @@
+{
+  "name": "enviromentvariable",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "po-test-chromium": "npx playwright test example.spec.ts --project=chromium",
+    "po-test-chromium:qa":"set \"TEST_ENV=qa\" && npx playwright test example.spec.ts --project=chromium",
+    "po-test-firefox": "npx playwright test example.spec.ts --project=firefox",
+    "po-test-all": "npm run po-test-chromium && npm run po-test-firefox"
+  },
+
+  "keywords": [],
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^26.6.5",
+    "dotenv": "^18.0.8"
+  }
+}
