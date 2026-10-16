@@ -1,9 +1,9 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, qa ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, qa ]
 jobs:
   test:
     timeout-minutes: 60
@@ -15,8 +15,20 @@ jobs:
         node-version: lts/*
     - name: Install dependencies
       run: npm ci
-    - name: Install Playwright Browsers
+      name:Install Playwright Browsers
       run: npx playwright install --with-deps
+    - name: Setup Environment variables
+      run: |
+       if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+          echo "URL=${{ secrets.URL }}" >> $GITHUB_ENV
+          echo "TEST_USER_EMAIL=${{ secrets.TEST_USER_EMAIL }}" >> $GITHUB_ENV
+          echo "TEST_USER_PASSWORD=${{ secrets.TEST_USER_PASSWORD }}" >> $GITHUB_ENV
+        else
+          echo "URL=${{ secrets.URL_QA }}" >> $GITHUB_ENV
+          echo "TEST_USER_EMAIL=${{ secrets.TEST_USER_EMAIL_QA }}" >> $GITHUB_ENV
+          echo "TEST_USER_PASSWORD=${{ secrets.TEST_USER_PASSWORD_QA }}" >> $GITHUB_ENV
+        fi
+    
     - name: Run Playwright tests
       run: npx playwright test
     - uses: actions/upload-artifact@v4
